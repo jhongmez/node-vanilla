@@ -5,18 +5,20 @@ import { Role } from "../enums/role.enum";
 const emailSchema = pipe( string(), email() );
 const passwordSchema = pipe( string(), minLength(6), maxLength(15) );
 
-// Create Schema for authentication of users
+/** Validation schema for the credentials used to authenticate or register a user. */
 export const authSchema = object({
     email: emailSchema,
     password: passwordSchema
 });
 
+/** A user as stored in memory, including its generated id, role and optional refresh token. */
 export type User = InferInput<typeof authSchema> & {
     id: number;
     role: Role;
     refreshToken?: string;
 };
 
+/** In-memory store of users, keyed by email. */
 const users: Map<string, User> = new Map();
 
 /**
@@ -43,11 +45,11 @@ export const createUser = async(
     return newUser;
 }
 
-/** 
+/**
  * Finds a user by their given email
- * 
+ *
  * @param { string } email - The email of User to find.
- * @returns { CUSTOMER | undefined } - The user if found, otherwise undefined.
+ * @returns { User | undefined } - The user if found, otherwise undefined.
 */
 export const findUserByEmail = ( email: string ): User | undefined => {
     return users.get( email );
@@ -57,7 +59,7 @@ export const findUserByEmail = ( email: string ): User | undefined => {
  * Validate a user's password
  * 
  * @param { User } user - The user whose password is to validated.
- * @param { password } password - The password validate.
+ * @param { string } password - The password to validate.
  * @returns { Promise<boolean> } - True if the password is valid, otherwise false.
 */
 export const validatePassword = async(

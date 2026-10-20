@@ -1,3 +1,4 @@
+/** Supported HTTP methods used to route incoming requests. */
 export enum HttpMethodEnum {
     "GET" = "GET",
     "POST" = "POST",
