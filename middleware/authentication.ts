@@ -3,10 +3,23 @@ import { verify, type JwtPayload } from "jsonwebtoken";
 import { isTokenRevoked } from "../models";
 import config from "../config";
 
+/**
+ * An incoming request extended with the decoded JWT payload once authenticated.
+ */
 export interface AuthenticationRequest extends IncomingMessage {
     user?: JwtPayload | string;
 }
 
+/**
+ * Middleware that authenticates a request using the `Authorization: Bearer <token>` header.
+ *
+ * Responds with 401 when no token is provided, 403 when the token was revoked or is invalid,
+ * and attaches the decoded payload to `req.user` on success.
+ *
+ * @param { AuthenticationRequest } req - The incoming request to authenticate.
+ * @param { ServerResponse } res - The response used to end the request when authentication fails.
+ * @returns { Promise<boolean> } - true if the token is valid; otherwise false.
+ */
 export const authenticateToken = async(
     req: AuthenticationRequest,
     res: ServerResponse
