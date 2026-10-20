@@ -20,7 +20,7 @@ export type User = InferInput<typeof authSchema> & {
 const users: Map<string, User> = new Map();
 
 /**
-* Create a new user tih the given email and password
+* Create a new user with the given email and password
 * The password is hashed before saved
 * 
 * @param { string } email - The email of the user.
